@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Albums Collection</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      max-width: 500px;
+      width: 100%;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .album-card {
+      padding: 15px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      background-color: #f9f9f9;
+      margin-bottom: 15px;
+    }
+
+    .album-card h2 {
+      margin: 0 0 10px;
+      font-size: 18px;
+    }
+
+    .album-card p {
+      margin: 5px 0;
+    }
+
+    .album-card:last-child {
+      margin-bottom: 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Albums Collection</h1>
+    <div id="albums-container"></div>
+  </div>
+
+  <script>
+    // Fetch albums data from the backend
+    fetch("http://localhost:8080/albums")
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok " + response.statusText);
+        }
+        return response.json();
+      })
+      .then(data => {
+        const container = document.getElementById("albums-container");
+        data.forEach(album => {
+          const card = document.createElement("div");
+          card.classList.add("album-card");
+
+          card.innerHTML = `
+            <h2>${album.title}</h2>
+            <p><strong>Artist:</strong> ${album.artist}</p>
+            <p><strong>Price:</strong> $${album.price.toFixed(2)}</p>
+          `;
+
+          container.appendChild(card);
+        });
+      })
+      .catch(error => {
+        console.error("Error fetching albums:", error);
+      });
+  </script>
+</body>
+</html>
